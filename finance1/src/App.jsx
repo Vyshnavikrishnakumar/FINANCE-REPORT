@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import './App.css'
 import Navbar from './components/Navbar'
 import { Route, Routes } from 'react-router-dom'
@@ -14,12 +13,10 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/a" element={<Signup />} />
-        <Route path="/b" element={<Admin />} />
-        <Route path="/c" element={<Dashboard />} />
-
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
-      {/* <Admin/> */}
     </>
   );
 }
