@@ -1,7 +1,11 @@
 import { TextField, Typography } from '@mui/material'
+import axios from 'axios'
 import React from 'react'
 
 const Dashboard = () => {
+	axios.post((req,res)=>{
+		
+	})
 	return (
 	<div>
 		<Typography variant='h3'style={{  color: 'black', textAlign: 'center',fontSize:'170%',fontWeight:'bold',fontStyle: 'italic' }}>
@@ -21,9 +25,7 @@ const Dashboard = () => {
 					width: '30%',
 					height:'90%',
 					textAlign: 'right'
-					// marginRight:'30%'
 				}}
-				marginLeft='30%'
 				label='amount'
 				InputLabelProps={{
 				sx: {

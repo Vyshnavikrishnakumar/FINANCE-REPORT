@@ -4,7 +4,7 @@ import Logo from '../assets/Logo.png'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const Login = () => {
+const Signup = () => {
 	const navigate = useNavigate();
 	const [inputs,setInputs] = useState({
 		"username":"",
@@ -78,4 +78,4 @@ const Login = () => {
 	)
 }
 
-export default Login
+export default Signup

@@ -1,9 +1,39 @@
 import { Button, TextField, Typography } from '@mui/material'
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import Logo from '../assets/Logo.png'
+import axios from 'axios'
+import Cookies from 'universal-cookie';
 
 const Login = () => {
+	const navigate = useNavigate();
+	const cookies = new Cookies();
+	const [inputs,setInputs] = useState({
+		"username":"",
+		"password":""
+	});
+
+	const inputHandler = (e)=>{
+		setInputs({...inputs,[e.target.name]:e.target.value});
+	};
+
+	const loginUser = ()=>{
+		axios.post("http://localhost:3000/api/signin",inputs).then(
+			(res)=>{
+				alert("Login success");
+				cookies.set('session', res.data.token, { path: '/' });
+				navigate("/dashboard");
+			}
+		).catch(
+			(err)=>{
+				alert(err.response.data);
+			}
+		);
+	};
+
+	useEffect(()=>{
+		
+	},[])
 	return (
 	<div >
 		<img src={Logo} alt="SpendSmart Logo" style={{ height:160,width:900, marginLeft: 10,borderRadius:100 }}></img>
@@ -14,7 +44,7 @@ const Login = () => {
 		</Typography>
 		<br /><br />
 
-		<TextField variant='outlined' sx={{
+		<TextField required onChange={inputHandler} name='username' variant='outlined' sx={{
 			backgroundColor: 'white',
 			borderRadius: 1,
 			width: '40%',
@@ -28,7 +58,7 @@ const Login = () => {
 		</TextField>
 		<br /><br /><br />
 
-		<TextField variant='outlined' type='password' sx={{
+		<TextField required onChange={inputHandler} name='password' variant='outlined' type='password' sx={{
 			backgroundColor: 'white',
 			borderRadius: '10%',
 			width: '40%',
@@ -42,7 +72,7 @@ const Login = () => {
 		</TextField>
 		<br /><br /><br />
 
-		<Button variant='contained'sx={{
+		<Button onClick={loginUser} variant='contained' sx={{
 			borderRadius: '20',
 			width: '37%',
 			backgroundColor: 'grey',
@@ -55,7 +85,7 @@ const Login = () => {
 			color: 'grey',
 			fontSize:'10px'
 		}}>
-			<Link to={'/admin'}   style={{textDecoration:"none",color: 'grey'}}> 
+			<Link to={'/admin'} style={{textDecoration:"none",color: 'grey'}}> 
 				Login as admin
 			</Link> 
 		</Button>		

@@ -10,6 +10,8 @@
   "description": "",
   "dependencies": {
     "express": "^4.19.2",
-    "mongoose": "^8.5.1"
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.5.1",
+    "universal-cookie-express": "^7.1.4"
   }
 }
