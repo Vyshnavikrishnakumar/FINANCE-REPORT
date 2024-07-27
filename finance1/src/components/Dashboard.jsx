@@ -8,7 +8,7 @@ const Dashboard = () => {
   useEffect(() => {
     axios.get('http://localhost:3000/api/data', {
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}` // Assuming you save the token in localStorage
+        'Authorization': `Bearer ${localStorage.getItem('token')}` 
       }
     })
     .then(response => {
