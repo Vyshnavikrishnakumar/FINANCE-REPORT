@@ -40,7 +40,7 @@ app.post("/api/verify",async(req,res)=>{
 
 app.post("/api/signup",async(req,res)=>{
 	try {
-		await sampleModel(req.body).save();
+		await UserModel(req.body).save();
 		res.send("User Created");
 	} catch (error) {
 		console.log(error);
