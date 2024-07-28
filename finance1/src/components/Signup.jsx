@@ -1,5 +1,5 @@
 import { Button, TextField, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Logo from '../assets/Logo.png'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -29,9 +29,22 @@ const Signup = () => {
 		);
 	};
 
+	useEffect(() => {
+		const listener = event => {
+		  if (event.code === "Enter" || event.code === "NumpadEnter") {
+			event.preventDefault();
+			addUser();
+		  }
+		};
+		document.addEventListener("keydown", listener);
+		return () => {
+		  document.removeEventListener("keydown", listener);
+		};
+	  }, []);
+
 	return (
 	<div >
-		<img src={Logo} alt="Logo" style={{ height:160,width:900, marginLeft: 10,borderRadius:100 }} ></img>
+		<img src={Logo} alt="Logo" style={{ height:160,width:265, marginLeft: 10,borderRadius:100 }} ></img>
 		<br /><br />
 
 		<Typography variant='h3'style={{ padding:'0%', color: 'black', textAlign: 'center',fontSize:'250%',fontWeight:'bold',fontStyle: 'italic' }}>

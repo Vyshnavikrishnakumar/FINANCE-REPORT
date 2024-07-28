@@ -1,5 +1,5 @@
 import { Button, TextField, Typography } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Logo from '../assets/Logo.png'
 import axios from 'axios'
@@ -12,7 +12,7 @@ const Login = () => {
 		"username":"",
 		"password":""
 	});
-
+	
 	const inputHandler = (e)=>{
 		setInputs({...inputs,[e.target.name]:e.target.value});
 	};
@@ -31,12 +31,21 @@ const Login = () => {
 		);
 	};
 
-	useEffect(()=>{
-		
-	},[])
+	useEffect(() => {
+		const listener = event => {
+		  if (event.code === "Enter" || event.code === "NumpadEnter") {
+			event.preventDefault();
+			loginUser();
+		  }
+		};
+		document.addEventListener("keydown", listener);
+		return () => {
+		  document.removeEventListener("keydown", listener);
+		};
+	  }, []);
 	return (
 	<div >
-		<img src={Logo} alt="SpendSmart Logo" style={{ height:160,width:900, marginLeft: 10,borderRadius:100 }}></img>
+		<img src={Logo} alt="SpendSmart Logo" style={{ height:160,width:265, marginLeft: 10,borderRadius:100 }}></img>
 		<br /><br />
 
 		<Typography variant='h3'style={{ padding:'0%', color: 'black', textAlign: 'center',fontSize:'250%',fontWeight:'bold',fontStyle: 'italic' }}>
@@ -72,7 +81,7 @@ const Login = () => {
 		</TextField>
 		<br /><br /><br />
 
-		<Button onClick={loginUser} variant='contained' sx={{
+		<Button onClick={loginUser} type='submit' variant='contained' sx={{
 			borderRadius: '20',
 			width: '37%',
 			backgroundColor: 'grey',
@@ -81,7 +90,7 @@ const Login = () => {
 		</Button>
 		<br /><br />
 
-		<Button variant='text'sx={{
+		<Button variant='text' sx={{
 			color: 'grey',
 			fontSize:'10px'
 		}}>

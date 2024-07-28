@@ -1,5 +1,3 @@
-// index.js
-
 var express = require("express");
 require("./connection");
 var { UserModel, AdminModel } = require("./model");
@@ -11,21 +9,6 @@ var app = express();
 app.use(express.json());
 app.use(cookiesMiddleware());
 app.use(cors({ origin: 'http://localhost:5173', credentials: true })); // Add CORS middleware
-
-// Rest of your code...
-
-
-
-
-// var express = require("express");
-// require("./connection");
-// var sampleModel = require("./model");
-// const jwt = require('jsonwebtoken');
-// const cookiesMiddleware = require( 'universal-cookie-express' )
-
-// var app = express();
-// app.use(express.json());
-// app.use(cookiesMiddleware());
 
 // api
 app.use( ( req, res, next ) => {
