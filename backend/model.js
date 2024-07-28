@@ -1,14 +1,23 @@
+// model.js
+
 // import mongoose
 var mongoose = require("mongoose");
 
 // schema creation
-var schema = mongoose.Schema({
-	username:String,
-	password:String
+var userSchema = mongoose.Schema({
+  username: String,
+  password: String
+});
+
+// admin schema creation
+var adminSchema = mongoose.Schema({
+  username: String,
+  password: String
 });
 
 // model creation
-var crudModel = mongoose.model("sample",schema);
+var UserModel = mongoose.model("User", userSchema);
+var AdminModel = mongoose.model("Admin", adminSchema);
 
 // exporting
-module.exports = crudModel;
+module.exports = { UserModel, AdminModel };
