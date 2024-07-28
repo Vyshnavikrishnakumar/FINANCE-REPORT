@@ -7,13 +7,19 @@ import axios from 'axios';
 const Signup = () => {
 	const navigate = useNavigate();
 	const [inputs,setInputs] = useState({
-		"username":"",
-		"password":""
+		username:"",
+		password:""
 	});
 
 	const inputHandler = (e)=>{
 		setInputs({...inputs,[e.target.name]:e.target.value});
 	};
+
+	const defaultKey=(event)=> {
+        if (event.code === "Enter" || event.code === "NumpadEnter") {
+            loginUser();
+        }
+    };
 
 	const addUser = ()=>{
 		axios.post("http://localhost:3000/api/signup",inputs).then(
@@ -51,7 +57,7 @@ const Signup = () => {
 		</Typography>
 		<br /><br />
 
-		<TextField required onChange={inputHandler} name='username' variant='outlined' sx={{
+		<TextField required onChange={inputHandler} onKeyDown={defaultKey} name='username' variant='outlined' sx={{
 			backgroundColor: 'white',
 			borderRadius: 1,
 			width: '40%',
@@ -65,7 +71,7 @@ const Signup = () => {
 		</TextField>
 		<br /><br /><br />
 
-		<TextField required onChange={inputHandler} name='password' variant='outlined' type='password' sx={{
+		<TextField required onChange={inputHandler} onKeyDown={defaultKey} name='password' variant='outlined' type='password' sx={{
 			backgroundColor: 'white',
 			borderRadius: '10%',
 			width: '40%',

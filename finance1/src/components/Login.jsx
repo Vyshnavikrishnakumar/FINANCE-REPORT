@@ -1,5 +1,5 @@
 import { Button, TextField, Typography } from '@mui/material'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Logo from '../assets/Logo.png'
 import axios from 'axios'
@@ -9,13 +9,19 @@ const Login = () => {
 	const navigate = useNavigate();
 	const cookies = new Cookies();
 	const [inputs,setInputs] = useState({
-		"username":"",
-		"password":""
+		username:"",
+		password:""
 	});
 	
 	const inputHandler = (e)=>{
 		setInputs({...inputs,[e.target.name]:e.target.value});
 	};
+
+	const defaultKey=(event)=> {
+        if (event.code === "Enter" || event.code === "NumpadEnter") {
+            loginUser();
+        }
+    };
 
 	const loginUser = ()=>{
 		axios.post("http://localhost:3000/api/signin",inputs).then(
@@ -30,22 +36,9 @@ const Login = () => {
 			}
 		);
 	};
-
-	useEffect(() => {
-		const listener = event => {
-		  if (event.code === "Enter" || event.code === "NumpadEnter") {
-			event.preventDefault();
-			loginUser();
-		  }
-		};
-		document.addEventListener("keydown", listener);
-		return () => {
-		  document.removeEventListener("keydown", listener);
-		};
-	  }, []);
 	return (
 	<div >
-		<img src={Logo} alt="SpendSmart Logo" style={{ height:160,width:320, marginLeft: 10,borderRadius:100 }}></img>
+		<img src={Logo} alt="Spend Smart Logo" style={{ height:160,width:320, marginLeft: 10,borderRadius:100 }}></img>
 		<br /><br />
 
 		<Typography variant='h3'style={{ padding:'0%', color: 'black', textAlign: 'center',fontSize:'250%',fontWeight:'bold',fontStyle: 'italic' }}>
@@ -53,7 +46,7 @@ const Login = () => {
 		</Typography>
 		<br /><br />
 
-		<TextField required onChange={inputHandler} name='username' variant='outlined' sx={{
+		<TextField required onChange={inputHandler} onKeyDown={defaultKey} name='username' variant='outlined' sx={{
 			backgroundColor: 'white',
 			borderRadius: 1,
 			width: '40%',
@@ -67,7 +60,7 @@ const Login = () => {
 		</TextField>
 		<br /><br /><br />
 
-		<TextField required onChange={inputHandler} name='password' variant='outlined' type='password' sx={{
+		<TextField required onChange={inputHandler} onKeyDown={defaultKey} name='password' variant='outlined' type='password' sx={{
 			backgroundColor: 'white',
 			borderRadius: '10%',
 			width: '40%',
