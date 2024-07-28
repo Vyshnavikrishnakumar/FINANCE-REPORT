@@ -18,13 +18,12 @@ const Signup = () => {
 	const addUser = ()=>{
 		axios.post("http://localhost:3000/api/signup",inputs).then(
 			(res)=>{
-				console.log("User created");
 				alert("User created");
 				navigate("/");
 			}
 		).catch(
 			(err)=>{
-				console.error(err);
+				alert(err["response"]["data"]);
 			}
 		);
 	};

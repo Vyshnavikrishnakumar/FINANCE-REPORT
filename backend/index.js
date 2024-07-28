@@ -12,8 +12,8 @@ app.use(cors({ origin: 'http://localhost:5173', credentials: true })); // Add CO
 
 // api
 app.use( ( req, res, next ) => {
-    req.session = req.universalCookies.get('session')
-    next()
+		req.session = req.universalCookies.get('session')
+		next()
 })
 
 app.post("/api/verify",async(req,res)=>{
@@ -23,8 +23,14 @@ app.post("/api/verify",async(req,res)=>{
 
 app.post("/api/signup",async(req,res)=>{
 	try {
-		await UserModel(req.body).save();
-		res.send("User Created");
+		const { username } = req.body;
+		const userData = await UserModel.findOne({ username });
+		if (userData && userData.username === username) {
+			res.status(401).send('User already exists!');
+		} else {
+			await UserModel(req.body).save();
+			res.send("User Created");
+		}
 	} catch (error) {
 		console.log(error);
 	}
@@ -32,34 +38,34 @@ app.post("/api/signup",async(req,res)=>{
 
 // User sign-in
 app.post("/api/signin", async (req, res) => {
-  const { username, password } = req.body;
-  const userData = await UserModel.findOne({ username });
-  if (userData && userData.password === password) {
-    const token = jwt.sign({ id: userData._id }, 'hd8weh38dsh8sdJJ9asn==');
-    res.send({ token });
-  } else {
-    res.status(401).send('Invalid login credentials');
-  }
+	const { username, password } = req.body;
+	const userData = await UserModel.findOne({ username });
+	if (userData && userData.password === password) {
+		const token = jwt.sign({ id: userData._id }, 'hd8weh38dsh8sdJJ9asn==');
+		res.send({ token });
+	} else {
+		res.status(401).send('Invalid login credentials');
+	}
 });
 
 // Admin sign-in
 app.post("/api/admin/signin", async (req, res) => {
-  const { username, password } = req.body;
-  const adminData = await AdminModel.findOne({ username });
-  if (adminData && adminData.password === password) {
-    const token = jwt.sign({ id: adminData._id }, 'hd8weh38dsh8sdJJ9asn==');
-    res.send({ token });
-  } else {
-    res.status(401).send('Invalid login credentials');
-  }
+	const { username, password } = req.body;
+	const adminData = await AdminModel.findOne({ username });
+	if (adminData && adminData.password === password) {
+		const token = jwt.sign({ id: adminData._id }, 'hd8weh38dsh8sdJJ9asn==');
+		res.send({ token });
+	} else {
+		res.status(401).send('Invalid login credentials');
+	}
 });
 
 // Verify session
 app.post("/api/verify", async (req, res) => {
-  const sessionID = req.session;
-  console.log(sessionID);
+	const sessionID = req.session;
+	console.log(sessionID);
 });
 
 app.listen("3000", () => {
-  console.log("Port is up and running!");
+	console.log("Port is up and running!");
 });
