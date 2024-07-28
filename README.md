@@ -1,4 +1,4 @@
-# Spend Smart - Personal Finance Management App
+# ![Spend Smart Logo](https://raw.githubusercontent.com/gouthamsanthosh-gsx/FINANCE-REPORT/main/finance1/public/finance.png "Spend Smart") Spend Smart - Personal Finance Management App
 ## ICT Academy MERN Stack Project
 ![ICT Academy Logo](https://raw.githubusercontent.com/gouthamsanthosh-gsx/FINANCE-REPORT/main/github/ictacademy.png "ICT Academy Kerala")
 
