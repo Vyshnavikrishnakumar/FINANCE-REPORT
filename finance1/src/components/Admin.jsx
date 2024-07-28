@@ -26,7 +26,7 @@ const Admin = () => {
 	  }
 	).catch(
 	  (err) => {
-		alert(err.response.data);
+		alert(err["response"]["data"]);
 	  }
 	);
   };
@@ -46,7 +46,7 @@ const Admin = () => {
 
   return (
 	<div>
-	  <img src={Logo} alt="Logo" style={{ height:160,width:265, marginLeft: 10,borderRadius:100 }}></img>
+	  <img src={Logo} alt="Logo" style={{ height:160,width:320, marginLeft: 10,borderRadius:100 }}></img>
 	  <br /><br />
 	  
 	  <Typography variant='h3' style={{ padding:'0%', color: 'black', textAlign: 'center', fontSize:'250%', fontWeight:'bold', fontStyle: 'italic' }}>

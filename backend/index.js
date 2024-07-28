@@ -16,12 +16,7 @@ app.use(cors({ origin: "http://localhost:5173", credentials: true })); // Add CO
 app.use( ( req, res, next ) => {
 		req.session = req.universalCookies.get("session")
 		next()
-})
-
-app.post("/api/verify",async(req,res)=>{
-	const sessionID = req.session;
-	console.log(sessionID);
-})
+});
 
 app.post("/api/signup",async(req,res)=>{
 	try {
@@ -46,7 +41,10 @@ app.post("/api/signup",async(req,res)=>{
 app.post("/api/signin", async (req, res) => {
 	const { username, password } = req.body;
 	const userData = await UserModel.findOne({ username });
-	if (userData && userData.password === password) {
+	if (username.trim() === "" || password.trim() === ""){
+		res.status(401).send("Please fill all the field(s)!");
+	}
+	else if (userData && userData.password === password) {
 		const token = jwt.sign({ id: userData._id }, tokenSecret);
 		res.send({ token });
 	} else {
@@ -58,7 +56,10 @@ app.post("/api/signin", async (req, res) => {
 app.post("/api/admin/signin", async (req, res) => {
 	const { username, password } = req.body;
 	const adminData = await AdminModel.findOne({ username });
-	if (adminData && adminData.password === password) {
+	if (username.trim() === "" || password.trim() === ""){
+		res.status(401).send("Please fill all the field(s)!");
+	}
+	else if (adminData && adminData.password === password) {
 		const token = jwt.sign({ id: adminData._id }, tokenSecret);
 		res.send({ token });
 	} else {

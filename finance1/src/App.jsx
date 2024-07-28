@@ -6,7 +6,8 @@ import Login from './components/Login'
 import Signup from './components/Signup'
 import Admin from './components/Admin'
 import Dashboard from './components/Dashboard'
-import AdminDashboard from './components/AdminDashboard' // Import AdminDashboard
+import AdminDashboard from './components/AdminDashboard'
+import Add from './components/Add'
 
 function App() {
   return (
@@ -17,7 +18,8 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} /> {/* Add route for AdminDashboard */}
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/dashboard/add" element={<Add />} />
       </Routes>
     </>
   );

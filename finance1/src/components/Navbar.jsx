@@ -9,7 +9,7 @@ const Navbar = () => {
 		<Box>
 		<AppBar sx={{ backgroundColor: 'lightgrey' }}>
 			<Toolbar>
-			<img src={Logo} alt="Logo" style={{ height:60,width:99, marginLeft: 10 }} />
+			<img src={Logo} alt="Logo" style={{ height:60,width:120, marginLeft: 10 }} />
 			
 			<Button variant='contained' sx={{
 				backgroundColor: 'grey',
