@@ -10,12 +10,29 @@ const tokenSecret = "hd8weh38dsh8sdJJ9asn==";
 var app = express();
 app.use(express.json());
 app.use(cookiesMiddleware());
-app.use(cors({ origin: "http://localhost:5173", credentials: true })); // Add CORS middleware
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+
+
+function verifyToken(token) {
+	// Returns the user ID if valid or else empty string
+	if (token) {
+		try {
+			const id = jwt.verify(token, tokenSecret);
+			return id["id"];
+		}
+		catch {
+			return "";
+		}
+	}
+	else {
+		return ""
+	}
+}
 
 // api
 app.use( ( req, res, next ) => {
-		req.session = req.universalCookies.get("session")
-		next()
+		req.session = req.universalCookies.get("session");
+		next();
 });
 
 app.post("/api/signup",async(req,res)=>{
@@ -68,9 +85,15 @@ app.post("/api/admin/signin", async (req, res) => {
 });
 
 // Verify session
-app.post("/api/verify", async (req, res) => {
-	const sessionID = req.session;
-	console.log(sessionID);
+app.get("/api/dashboard", async (req, res) => {
+	const token = req.headers.authorization.replace("Bearer ","");
+	const userID = verifyToken(token);
+	if (userID === "") {
+		res.status(401).send("Access Denied!")
+	}
+	else {
+		const userData = await UserModel.findOne({ userID });
+	}
 });
 
 app.listen("3000", () => {

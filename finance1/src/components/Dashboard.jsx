@@ -1,29 +1,38 @@
 import { useState, useEffect } from 'react';
 import { TextField, Typography, Card, CardContent, Button } from '@mui/material';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const Dashboard = () => {
-  const [data, setData] = useState([]);
+	const navigate = useNavigate();
+	const [data, setData] = useState([]);
+	var errTimes = -1;
 
-  useEffect(() => {
-	axios.get('http://localhost:3000/api/data', {
-	  headers: {
-		'Authorization': `Bearer ${localStorage.getItem('token')}` 
-	  }
-	})
-	.then(response => {
-	  setData(response.data);
-	})
-	.catch(error => {
-	  console.error('There was an error fetching the data!', error);
-	});
-  }, []);
+	useEffect(() => {
+		axios.get('http://localhost:3000/api/dashboard', {
+			headers: {
+				"Authorization": `Bearer ${Cookies.get("session")}`
+			}
+		})
+		.then(response => {
+			setData(response.data);
+		})
+		.catch(err => {
+			if (errTimes === 0) {
+				alert(err["response"]["data"]);
+				navigate("/");
+			}
+			else {
+				errTimes = errTimes + 1;
+			}
+		});
+	}, []);
 
   return (
 	<div>
 		<Typography variant='h3' style={{ color: 'black', textAlign: 'center', fontSize: '170%', fontWeight: 'bold', fontStyle: 'italic' }}>
-		DASHBOARD
+			DASHBOARD
 		</Typography>
 		<br /><br /><br />
 		<div style={{ display: 'flex', justifyContent: 'space-between' }}>
