@@ -13,26 +13,33 @@ app.use(cookiesMiddleware());
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 
 
-function verifyToken(token) {
-	// Returns and object with user ID and admin status if valid or else empty string
+function verifyToken(rawToken) {
+	// Returns and object with user ID and admin status if valid or else empty {}
+	var token = "";
+	const emptyObj = {id:"", isAdmin:0};
+	try {
+		token = rawToken.replace("Bearer ","");
+	} catch {
+		return emptyObj;
+	}
 	if (token) {
 		try {
 			const id = jwt.verify(token, tokenSecret);
 			return id;
 		}
 		catch {
-			return "";
+			return emptyObj;
 		}
 	}
 	else {
-		return ""
+		return emptyObj;
 	}
 }
 
 
 app.use( ( req, res, next ) => {
-		req.session = req.universalCookies.get("session");
-		next();
+	req.session = req.universalCookies.get("session");
+	next();
 });
 
 
@@ -71,12 +78,12 @@ app.post("/api/signin", async (req, res) => {
 });
 
 app.get("/api/dashboard", async (req, res) => {
-	const token = req.headers.authorization.replace("Bearer ","");
-	const userID = verifyToken(token)["id"];
+	const userID = verifyToken(req.headers.authorization)["id"];
 	if (userID === "") {
 		res.status(401).send("Access Denied!")
 	}
 	else {
+		//goutham - Fetch data for user dashboard
 		const userData = await UserModel.findOne({ userID });
 	}
 });
@@ -98,15 +105,9 @@ app.post("/api/admin/signin", async (req, res) => {
 });
 
 app.get("/api/admin/getUserList", async (req, res) => {
-	var token = "";
-	try {
-		token = req.headers.authorization.replace("Bearer ","");
-	} catch (error) {
-		console.log("No bearer token!");
-	}
-	userID = verifyToken(token)["id"];
-	isAdmin = verifyToken(token)["isAdmin"];
-	if (token === "" || userID === "" || isAdmin === 0) {
+	userID = verifyToken(req.headers.authorization)["id"];
+	isAdmin = verifyToken(req.headers.authorization)["isAdmin"];
+	if (userID === "" || isAdmin === 0) {
 		res.status(401).send("Access Denied!")
 	}
 	else {

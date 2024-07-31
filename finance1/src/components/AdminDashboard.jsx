@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom';
 const AdminDashboard = () => {
 	const navigate = useNavigate();
 	var [output,setOutput] = useState([]);
+	var errTimes = -1;
+	
 	const loadData = ()=>{
 		axios.get("http://localhost:3000/api/admin/getUserList", {
 			headers: {
@@ -19,7 +21,13 @@ const AdminDashboard = () => {
 			}
 		).catch(
 			(err)=>{
-				console.error(err);
+				if (errTimes === 0) {
+					alert(err.response.data);
+					navigate("/");
+				}
+				else {
+					errTimes = errTimes + 1;
+				}
 			}
 		)
 	};

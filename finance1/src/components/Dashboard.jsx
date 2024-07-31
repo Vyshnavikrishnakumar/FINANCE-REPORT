@@ -20,7 +20,7 @@ const Dashboard = () => {
 		})
 		.catch(err => {
 			if (errTimes === 0) {
-				alert(err["response"]["data"]);
+				alert(err.response.data);
 				navigate("/");
 			}
 			else {
