@@ -17,7 +17,7 @@ const Signup = () => {
 
 	const defaultKey=(event)=> {
         if (event.code === "Enter" || event.code === "NumpadEnter") {
-            loginUser();
+            addUser();
         }
     };
 
@@ -33,19 +33,6 @@ const Signup = () => {
 			}
 		);
 	};
-
-	useEffect(() => {
-		const listener = event => {
-		  if (event.code === "Enter" || event.code === "NumpadEnter") {
-			event.preventDefault();
-			addUser();
-		  }
-		};
-		document.addEventListener("keydown", listener);
-		return () => {
-		  document.removeEventListener("keydown", listener);
-		};
-	  }, []);
 
 	return (
 	<div >

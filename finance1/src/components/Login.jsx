@@ -27,7 +27,7 @@ const Login = () => {
 		axios.post("http://localhost:3000/api/signin",inputs).then(
 			(res)=>{
 				alert("Login success");
-				cookies.set('session', res.data.token, { path: '/' });
+				cookies.set('session', res.data.token, { path: '/', secure: true, sameSite: true });
 				navigate("/dashboard");
 			}
 		).catch(

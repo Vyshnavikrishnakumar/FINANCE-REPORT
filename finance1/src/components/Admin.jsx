@@ -19,22 +19,22 @@ const Admin = () => {
 
 	const defaultKey=(event)=> {
         if (event.code === "Enter" || event.code === "NumpadEnter") {
-            loginUser();
+            loginAdmin();
         }
     };
 
 	const loginAdmin = () => {
-	axios.post("http://localhost:3000/api/admin/signin", inputs).then(
-		(res) => {
-		alert("Login success");
-		cookies.set('session', res.data.token, { path: '/' });
-		navigate("/admin/dashboard");
-		}
-	).catch(
-		(err) => {
-		alert(err["response"]["data"]);
-		}
-	);
+		axios.post("http://localhost:3000/api/admin/signin", inputs).then(
+			(res) => {
+			alert("Login success");
+			cookies.set('session', res.data.token, { path: '/', secure: true, sameSite: true });
+			navigate("/admin/dashboard");
+			}
+		).catch(
+			(err) => {
+			alert(err["response"]["data"]);
+			}
+		);
 	};
 	return (
 		<div>
