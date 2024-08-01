@@ -1,5 +1,5 @@
-import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import { Button, CircularProgress, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Typography } from '@mui/material'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import Cookies from 'universal-cookie'
@@ -8,10 +8,21 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 const Admin = () => {
+	const [loginFlag, setloginFlag] = useState(false);
+
+	function LoadingCircle() {
+		function Code() {
+			return (
+				<CircularProgress />
+			)
+		}
+		return Code();
+	}
+
 	const navigate = useNavigate();
 	const cookies = new Cookies();
 
-	const [showPassword, setShowPassword] = React.useState(false);
+	const [showPassword, setShowPassword] = useState(false);
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
 	const handleMouseDownPassword = (event) => {
 		event.preventDefault();
@@ -33,15 +44,17 @@ const Admin = () => {
     };
 
 	const loginAdmin = () => {
+		setloginFlag(true);
 		axios.post("http://localhost:3000/api/admin/signin", inputs).then(
 			(res) => {
-			alert("Login success");
+			setloginFlag(false);
 			cookies.set('session', res.data.token, { path: '/', secure: true, sameSite: true });
 			navigate("/admin/dashboard");
 			}
 		).catch(
 			(err) => {
-			alert(err["response"]["data"]);
+			setloginFlag(false);
+			alert(err.response.data);
 			}
 		);
 	};
@@ -122,6 +135,9 @@ const Admin = () => {
 		>
 			LOGIN
 		</Button>
+		<br /><br />
+
+		{ loginFlag ? <LoadingCircle/> : null }
 		<br /><br />
 		</div>
 	)

@@ -31,8 +31,13 @@ const AdminDashboard = () => {
 			}
 		)
 	};
-	const deleteEmp = (id)=>{
-		axios.delete("http://localhost:3000/api/admin/deleteUser/" + id).then(
+	
+	const deleteUser = (id)=>{
+		axios.delete("http://localhost:3000/api/admin/deleteUser/" + id,{
+			headers: {
+				"Authorization": `Bearer ${Cookies.get("session")}`
+			}
+		}).then(
 			(res)=>{
 				loadData();
 			}
@@ -42,9 +47,23 @@ const AdminDashboard = () => {
 			}
 		)
 	};
+
+	const blockUser = (id)=>{
+		axios.delete("http://localhost:3000/api/admin/deleteUser/" + id).then(
+			(res)=>{
+				loadData();
+			}
+		).catch(
+			(err)=>{
+				console.error(err);
+			}
+		)
+	}
+
 	useEffect(()=>{
 		loadData();
 	},[]);
+	
 	return (
 		<div>
 			<Typography variant='h3' style={{ color: 'black', textAlign: 'center', fontSize: '170%', fontWeight: 'bold', fontStyle: 'italic' }}>
@@ -60,20 +79,24 @@ const AdminDashboard = () => {
 				<Table>
 					<TableHead>
 						<TableRow>
-							<TableCell>USERNAME</TableCell>
+							<TableCell><Typography variant='h6'>USERNAME</Typography></TableCell>
+							<TableCell><Typography variant='h6'>ACTIONS</Typography></TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
 						{output.map((val,i)=>{
 							return (
 								<TableRow key={i}>
-									<TableCell>{val.username}</TableCell>
+									<TableCell><Typography variant='h7'>{val.username}</Typography></TableCell>
 									<TableCell>
 										<Button color='primary' variant='contained' onClick={()=>{
 											navigate('/admin/userdashboard',{state:val})
-										}}>View Expenses</Button>&nbsp;&nbsp;
+										}}>View dashboard</Button>&nbsp;&nbsp;
+										<Button color='secondary' variant='contained' onClick={()=>{
+											navigate('/admin/userdashboard',{state:val})
+										}}>Block</Button>&nbsp;&nbsp;
 										<Button color='error' variant='contained' onClick={()=>{
-											deleteEmp(val._id);
+											deleteUser(val._id);
 										}}>Delete</Button>
 									</TableCell>
 								</TableRow>

@@ -1,5 +1,5 @@
-import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import { Button, CircularProgress, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Typography } from '@mui/material'
+import { useState } from 'react'
 import Logo from '../assets/Logo.png'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -7,9 +7,19 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 const Signup = () => {
-	const navigate = useNavigate();
+	const [loginFlag, setloginFlag] = useState(false);
 
-	const [showPassword, setShowPassword] = React.useState(false);
+	function LoadingCircle() {
+		function Code() {
+			return (
+				<CircularProgress />
+			)
+		}
+		return Code();
+	}
+
+	const navigate = useNavigate();
+	const [showPassword, setShowPassword] = useState(false);
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
 	const handleMouseDownPassword = (event) => {
 		event.preventDefault();
@@ -31,13 +41,16 @@ const Signup = () => {
     };
 
 	const addUser = ()=>{
+		setloginFlag(true);
 		axios.post("http://localhost:3000/api/signup",inputs).then(
 			(res)=>{
+				setloginFlag(false);
 				alert("User created");
 				navigate("/");
 			}
 		).catch(
 			(err)=>{
+				setloginFlag(false);
 				alert(err.response.data);
 			}
 		);
@@ -105,7 +118,11 @@ const Signup = () => {
 			backgroundColor: 'grey',
 			color: 'white'}}>
 			Sign Up
-		</Button>			
+		</Button>
+		<br /><br />
+
+		{ loginFlag ? <LoadingCircle/> : null }
+		<br /><br />			
 	</div>
 	)
 }

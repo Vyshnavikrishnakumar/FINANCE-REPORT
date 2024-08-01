@@ -4,12 +4,46 @@ import { Link } from 'react-router-dom'
 import Logo from '../assets/Logo.png'
 import { useLocation, useNavigate } from 'react-router-dom';
 import Cookies from 'universal-cookie';
+import Cookies2 from 'js-cookie';
 
 const Navbar = () => {
 	const location = useLocation().pathname;
 	const navigate = useNavigate();
 	const cookies = new Cookies();
+
+	function checkLogin() {
+		if (Cookies2.get("session") !== "") {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 	
+	function DashboardButton() {
+		function Code() {
+			return (
+				<Button variant='contained'
+					sx={{
+						backgroundColor: 'grey',
+						border: '1px solid black',
+						width:'10%',
+						color: 'black',
+						marginRight: '10px'
+					}}>
+					<Link to={'/dashboard'} style={{textDecoration:"none",color:'white'}}> 
+						Dashboard
+					</Link>
+				</Button>
+				
+			)
+		}
+		
+		if (location === "/" && checkLogin()) {
+			return Code();
+		}
+	}
+
 	function LoginButton() {
 		function Code() {
 			return (
@@ -94,21 +128,22 @@ const Navbar = () => {
 		window.location.reload();
 	};
 	return (
-	<div>
-		<Box>
-		<AppBar sx={{ backgroundColor: 'lightgrey' }}>
-			<Toolbar>
-			<img src={Logo} alt="Logo" style={{ height:60,width:120, marginLeft: 10, marginRight: 'auto'}} />			
-			
-			<LoginButton/>
-			<SignUpButton/>
-			<LogoutButton />
-			
-			</Toolbar>
-		</AppBar>
-		</Box>
-		<br /><br /><br /><br />
-	</div>
+		<div>
+			<Box>
+			<AppBar sx={{ backgroundColor: 'lightgrey' }}>
+				<Toolbar>
+				<img src={Logo} alt="Logo" style={{ height:60,width:120, marginLeft: 10, marginRight: 'auto'}} />			
+				
+				<DashboardButton/>
+				<LoginButton/>
+				<SignUpButton/>
+				<LogoutButton />
+				
+				</Toolbar>
+			</AppBar>
+			</Box>
+			<br /><br /><br /><br />
+		</div>
 	)
 }
 

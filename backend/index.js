@@ -44,6 +44,16 @@ app.use( ( req, res, next ) => {
 
 
 //*** USER ***
+app.get("/api/validateLogin", async (req, res) => {
+	const userID = verifyToken(req.headers.authorization)["id"];
+	if (userID === "") {
+		res.status(401).send("Access Denied!");
+	}
+	else {
+		res.send("OK");
+	}
+});
+
 app.post("/api/signup",async(req,res)=>{
 	try {
 		const { username,password } = req.body;
@@ -67,7 +77,7 @@ app.post("/api/signin", async (req, res) => {
 	const { username, password } = req.body;
 	const userData = await UserModel.findOne({ username });
 	if (username.trim() === "" || password.trim() === ""){
-		res.status(401).send("Please fill all the field(s)!");
+		res.status(401).send("Please fill out all fields!");
 	}
 	else if (userData && userData.password === password) {
 		const token = jwt.sign({ id: userData._id, isAdmin: 0 }, tokenSecret);
@@ -121,12 +131,19 @@ app.get("/api/admin/getUserList", async (req, res) => {
 });
 
 app.delete("/api/admin/deleteUser/:id",async(req,res)=>{
-	try {
-		var id = req.params.id;
-		await UserModel.findByIdAndDelete(id);
-		res.send({message:"data deleted"});
-	} catch (error) {
-		console.error(error);
+	userID = verifyToken(req.headers.authorization)["id"];
+	isAdmin = verifyToken(req.headers.authorization)["isAdmin"];
+	if (userID === "" || isAdmin === 0) {
+		res.status(401).send("Access Denied!")
+	}
+	else {
+		try {
+			var id = req.params.id;
+			await UserModel.findByIdAndDelete(id);
+			res.send({message:"data deleted"});
+		} catch (error) {
+			console.error(error);
+		}
 	}
 });
 
