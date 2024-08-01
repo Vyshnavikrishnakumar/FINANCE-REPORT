@@ -44,7 +44,7 @@ const Signup = () => {
 		</Typography>
 		<br /><br />
 
-		<TextField required onChange={inputHandler} onKeyDown={defaultKey} name='username' variant='outlined' sx={{
+		<TextField required autoFocus onChange={inputHandler} onKeyDown={defaultKey} name='username' variant='outlined' sx={{
 			backgroundColor: 'white',
 			borderRadius: 1,
 			width: '40%',

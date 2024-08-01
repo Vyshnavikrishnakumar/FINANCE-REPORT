@@ -46,7 +46,9 @@ const Admin = () => {
 		</Typography>
 		<br /><br />
 
-		<TextField 
+		<TextField
+			required
+			autoFocus
 			variant='outlined'
 			name='username'
 			value={inputs.username}

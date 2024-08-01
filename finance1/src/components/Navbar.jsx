@@ -32,6 +32,9 @@ const Navbar = () => {
 		if (location === "/signup") {
 			return Code();
 		}
+		else if (location === "/admin") {
+			return Code();
+		}
 	}
 	
 	function SignUpButton() {
@@ -53,6 +56,9 @@ const Navbar = () => {
 		}
 		
 		if (location === "/") {
+			return Code();
+		}
+		else if (location === "/admin") {
 			return Code();
 		}
 	}
