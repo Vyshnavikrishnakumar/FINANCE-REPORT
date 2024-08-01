@@ -20,6 +20,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/dashboard/add" element={<Add />} />
+        
       </Routes>
     </>
   );
