@@ -15,10 +15,10 @@ const Login = () => {
     });
 
     const navigate = useNavigate();
-    const handleClickShowPassword = () => setShowPassword((show) => !show);
-    const handleMouseDownPassword = (event) => event.preventDefault();
-    const inputHandler = (e) => setInputs({ ...inputs, [e.target.name]: e.target.value });
-    const defaultKey = (event) => {
+    const handleClickShowPassword = () => setShowPassword(show => !show);
+    const handleMouseDownPassword = event => event.preventDefault();
+    const inputHandler = e => setInputs({ ...inputs, [e.target.name]: e.target.value });
+    const defaultKey = event => {
         if (event.code === "Enter" || event.code === "NumpadEnter") {
             loginUser();
         }
@@ -26,35 +26,16 @@ const Login = () => {
 
     const loginUser = () => {
         setLoginFlag(true);
-        axios.post("http://localhost:3000/api/login", inputs).then(
-            (res) => {
+        axios.post("http://localhost:3000/api/login", inputs)
+            .then(res => {
                 setLoginFlag(false);
-                // Handle successful login (e.g., redirect to the user dashboard)
                 navigate("/dashboard");
-            }
-        ).catch(
-            (err) => {
+            })
+            .catch(err => {
                 setLoginFlag(false);
-                alert(err.response.data);
-            }
-        );
-    };
-
-    const loginAsAdmin = () => {
-        // This function can simulate an admin login or redirect directly
-        setLoginFlag(true);
-        axios.post("http://localhost:3000/api/admin-login", inputs).then(
-            (res) => {
-                setLoginFlag(false);
-                // Navigate to the admin dashboard
-                navigate("/admin/dashboard");
-            }
-        ).catch(
-            (err) => {
-                setLoginFlag(false);
-                alert(err.response.data);
-            }
-        );
+                const errorMessage = err.response ? err.response.data : 'An unexpected error occurred';
+                alert(errorMessage);
+            });
     };
 
     return (
@@ -163,15 +144,13 @@ const Login = () => {
                 </Button>
                 <br /><br />
 
-				<Button variant='text'sx={{
-          color: 'grey',
-          fontSize:'10px'
-        }}>
-                 <Link to={"/admin"}   style={{textDecoration:"none",color: 'grey'}}> 
-                  Login as admin
-                  </Link> 
-                  </Button>
-                  <br /><br />
+                <Button component={Link} to="/admin" variant='text' sx={{
+                    color: 'grey',
+                    fontSize: '10px'
+                }}>
+                    Login as admin
+                </Button>
+                <br /><br />
 
                 {loginFlag ? <CircularProgress /> : null}
             </Box>

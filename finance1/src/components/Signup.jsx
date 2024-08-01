@@ -7,7 +7,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 const Signup = () => {
-    const [loginFlag, setloginFlag] = useState(false);
+    const [loginFlag, setLoginFlag] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [inputs, setInputs] = useState({
         name: "",
@@ -28,16 +28,16 @@ const Signup = () => {
     };
 
     const addUser = () => {
-        setloginFlag(true);
+        setLoginFlag(true);
         axios.post("http://localhost:3000/api/signup", inputs).then(
             (res) => {
-                setloginFlag(false);
+                setLoginFlag(false);
                 alert("User created");
                 navigate("/");
             }
         ).catch(
             (err) => {
-                setloginFlag(false);
+                setLoginFlag(false);
                 alert(err.response.data);
             }
         );
@@ -47,29 +47,29 @@ const Signup = () => {
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '2rem', backgroundColor: '#f4f4f9', minHeight: '100vh' }}>
             <img src={Logo} alt="Logo" style={{ height: 120, width: 500, borderRadius: 8, marginBottom: '1rem' }} />
             
-			<Typography
-    variant='h3'
-    sx={{
-        padding: '1rem',
-        textAlign: 'center',
-        fontSize: '2.5rem',
-        fontWeight: 600,
-        color: 'lightblue',
-        marginBottom: '2rem',
-        fontFamily: 'Roboto, sans-serif',
-        textTransform: 'uppercase',
-        letterSpacing: '1px',
-        textShadow: `
-            1px 1px 0 rgba(0, 0, 139, 0.8), /* Dark blue outline */
-            -1px -1px 0 rgba(0, 0, 139, 0.8),
-            1px -1px 0 rgba(0, 0, 139, 0.8),
-            -1px 1px 0 rgba(0, 0, 139, 0.8),
-            0px 0px 4px rgba(0, 0, 139, 0.6) /* Soft glow */
-        `
-    }}
->
-    Sign Up
-</Typography>
+            <Typography
+                variant='h3'
+                sx={{
+                    padding: '1rem',
+                    textAlign: 'center',
+                    fontSize: '2.5rem',
+                    fontWeight: 600,
+                    color: 'lightblue',
+                    marginBottom: '2rem',
+                    fontFamily: 'Roboto, sans-serif',
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px',
+                    textShadow: `
+                        1px 1px 0 rgba(0, 0, 139, 0.8), /* Dark blue outline */
+                        -1px -1px 0 rgba(0, 0, 139, 0.8),
+                        1px -1px 0 rgba(0, 0, 139, 0.8),
+                        -1px 1px 0 rgba(0, 0, 139, 0.8),
+                        0px 0px 4px rgba(0, 0, 139, 0.6) /* Soft glow */
+                    `
+                }}
+            >
+                Sign Up
+            </Typography>
 
             <Box sx={{
                 backgroundColor: 'white',
@@ -193,15 +193,19 @@ const Signup = () => {
                 </FormControl>
                 <br /><br />
 
-                <Button onClick={addUser} variant='contained' sx={{
-                    borderRadius: '20px',
-                    width: '100%',
-                    backgroundColor: '#3498db',
-                    color: 'white',
-                    '&:hover': {
-                        backgroundColor: '#2980b9',
-                    }
-                }}>
+                <Button
+                    variant='contained'
+                    onClick={addUser}
+                    sx={{
+                        borderRadius: '20px',
+                        width: '37%',
+                        backgroundColor: 'grey',
+                        color: 'white',
+                        '&:hover': {
+                            backgroundColor: '#565656',
+                        }
+                    }}
+                >
                     Sign Up
                 </Button>
                 <br /><br />
