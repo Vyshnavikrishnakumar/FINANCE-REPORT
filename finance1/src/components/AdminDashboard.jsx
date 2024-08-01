@@ -108,6 +108,7 @@ const AdminDashboard = () => {
 					<TableHead>
 						<TableRow>
 							<TableCell><Typography variant='h6'>USERNAME</Typography></TableCell>
+							<TableCell><Typography variant='h6'>LAST LOGIN</Typography></TableCell>
 							<TableCell><Typography variant='h6'>ACTIONS</Typography></TableCell>
 						</TableRow>
 					</TableHead>
@@ -116,6 +117,7 @@ const AdminDashboard = () => {
 							return (
 								<TableRow key={i}>
 									<TableCell><Typography variant='h7'>{val.username}</Typography></TableCell>
+									<TableCell><Typography variant='h7'>{val.lastlogin}</Typography></TableCell>
 									<TableCell>
 										<Button color='primary' variant='contained' onClick={()=>{
 											navigate('/admin/userdashboard',{state:val})

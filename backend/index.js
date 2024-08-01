@@ -1,4 +1,5 @@
 var express = require("express");
+var moment = require("moment-timezone");
 require("./connection");
 var { UserModel, AdminModel } = require("./model");
 const jwt = require("jsonwebtoken");
@@ -83,6 +84,7 @@ app.post("/api/signin", async (req, res) => {
 		res.status(401).send("Account blocked!. Contact admin");
 	}
 	else if (userData && userData.password === password) {
+		await UserModel.findByIdAndUpdate(userData._id,{lastlogin:moment.tz(new Date().toUTCString(), "Asia/Kolkata").toLocaleString()});
 		const token = jwt.sign({ id: userData._id, isAdmin: 0 }, tokenSecret);
 		res.send({ token });
 	} else {
