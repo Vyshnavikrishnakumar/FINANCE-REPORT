@@ -79,6 +79,9 @@ app.post("/api/signin", async (req, res) => {
 	if (username.trim() === "" || password.trim() === ""){
 		res.status(401).send("Please fill out all fields!");
 	}
+	else if (userData && userData.blocked === 1) {
+		res.status(401).send("Account blocked!. Contact admin");
+	}
 	else if (userData && userData.password === password) {
 		const token = jwt.sign({ id: userData._id, isAdmin: 0 }, tokenSecret);
 		res.send({ token });
@@ -140,7 +143,31 @@ app.delete("/api/admin/deleteUser/:id",async(req,res)=>{
 		try {
 			var id = req.params.id;
 			await UserModel.findByIdAndDelete(id);
-			res.send({message:"data deleted"});
+			res.send({message:"user deleted"});
+		} catch (error) {
+			console.error(error);
+		}
+	}
+});
+
+app.post("/api/admin/blockUser/:id",async(req,res)=>{
+	userID = verifyToken(req.body.data.token)["id"];
+	isAdmin = verifyToken(req.body.data.token)["isAdmin"];
+	if (userID === "" || isAdmin === 0) {
+		res.status(401).send("Access Denied!")
+	}
+	else {
+		try {
+			var id = req.params.id;
+			var blockStatus = req.body.data.blockStatus;
+			if (blockStatus === 0) {
+				blockStatus = 1;
+			}
+			else {
+				blockStatus = 0;
+			}
+			await UserModel.findByIdAndUpdate(id,{blocked:blockStatus});
+			res.send({message:"user updated"});
 		} catch (error) {
 			console.error(error);
 		}

@@ -6,7 +6,8 @@ var mongoose = require("mongoose");
 // schema creation
 var userSchema = mongoose.Schema({
   username: String,
-  password: String
+  password: String,
+  blocked: Number
 });
 
 // admin schema creation

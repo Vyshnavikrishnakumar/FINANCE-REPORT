@@ -48,8 +48,36 @@ const AdminDashboard = () => {
 		)
 	};
 
-	const blockUser = (id)=>{
-		axios.delete("http://localhost:3000/api/admin/deleteUser/" + id).then(
+	function BlockButton(id,status) {
+		function Enabled() {
+			return (
+				<Button color='secondary' variant='contained' onClick={()=>{
+					blockUser(id,status);
+				}}>Block</Button>
+			)
+		}
+		function Disabled() {
+			return (
+				<Button color='secondary' variant='contained' onClick={()=>{
+					blockUser(id,status);
+				}}>Unblock</Button>
+			)
+		}
+		if (status == 1) {
+			return Disabled();
+		}
+		else {
+			return Enabled();
+		}
+	}
+
+	const blockUser = (id,blocked)=>{
+		axios.post("http://localhost:3000/api/admin/blockUser/" + id,{
+			data: {
+				token: `Bearer ${Cookies.get("session")}`,
+				blockStatus: blocked
+			}
+		}).then(
 			(res)=>{
 				loadData();
 			}
@@ -92,9 +120,7 @@ const AdminDashboard = () => {
 										<Button color='primary' variant='contained' onClick={()=>{
 											navigate('/admin/userdashboard',{state:val})
 										}}>View dashboard</Button>&nbsp;&nbsp;
-										<Button color='secondary' variant='contained' onClick={()=>{
-											navigate('/admin/userdashboard',{state:val})
-										}}>Block</Button>&nbsp;&nbsp;
+										{BlockButton(val._id,val.blocked)}&nbsp;&nbsp;
 										<Button color='error' variant='contained' onClick={()=>{
 											deleteUser(val._id);
 										}}>Delete</Button>
