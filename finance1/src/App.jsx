@@ -1,4 +1,4 @@
-import { useState } from 'react'
+// app.jsx
 import './App.css'
 import Navbar from './components/Navbar'
 import { Route, Routes } from 'react-router-dom'
@@ -6,28 +6,24 @@ import Login from './components/Login'
 import Signup from './components/Signup'
 import Admin from './components/Admin'
 import Dashboard from './components/Dashboard'
+import AdminDashboard from './components/AdminDashboard'
 import Add from './components/Add'
-import Adminmanage from './components/Adminmanage'
-
 
 function App() {
   return (
     <>
-     {location.pathname !== '/f' && <Navbar />}
       <Navbar />
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/a" element={<Signup />} />
-        <Route path="/b" element={<Admin />} />
-        <Route path="/c" element={<Dashboard />} />
-        <Route path="/d" element={<Add />} />
-        <Route path="/f" element={<Adminmanage />} />
-      
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/dashboard/add" element={<Add />} />
+        
       </Routes>
-    {/* <Route path="/f" element={<Adminmanage />} /> */}
-      {/* <Admin/> */}
     </>
   );
 }
 
-export default App
+export default App;

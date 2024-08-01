@@ -1,53 +1,95 @@
-import { Button, TextField, Typography } from '@mui/material'
-import React from 'react'
-import { Link } from 'react-router-dom'
+// src/components/Dashboard.jsx
+import React, { useContext, useEffect, useState } from 'react';
+import { TextField, Typography, Card, CardContent, Button, Container, Grid, Paper, Box } from '@mui/material';
+import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import IncomeContext from './IncomeContext';  // Ensure the import matches the default export
 
 const Dashboard = () => {
-  return (
-    <div>
-        <br />
-      <Typography variant='h3'style={{  color: 'black', textAlign: 'center',fontSize:'170%',fontWeight:'bold',fontStyle: 'italic' }}>
-      DASHBOARD </Typography>
-      <br /><br /><br />
+  const navigate = useNavigate();
+  const { income, setIncome } = useContext(IncomeContext);
+  const [data, setData] = useState([]);
+  let errTimes = -1;
 
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography variant='h3' style={{ padding: '0% 0%', color: 'black', fontSize: '250%', fontWeight: 'bold', textAlign: 'left',fontFamily:'times roman' }}>
-          MY  &nbsp;  INCOME
+  useEffect(() => {
+    axios.get('http://localhost:3000/api/dashboard', {
+      headers: {
+        "Authorization": `Bearer ${Cookies.get("session")}`
+      }
+    })
+      .then(response => {
+        setData(response.data);
+      })
+      .catch(err => {
+        if (errTimes === 0) {
+          alert(err.response.data);
+          navigate("/");
+        } else {
+          errTimes += 1;
+        }
+      });
+  }, [errTimes, navigate]);
+
+  return (
+    <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
+      <Paper elevation={3} sx={{ p: 3 }}>
+        <Typography variant="h3" sx={{ color: 'black', textAlign: 'center', fontSize: '170%', fontWeight: 'bold', fontStyle: 'italic' }}>
+          DASHBOARD
         </Typography>
-        <TextField
-          variant='outlined'
-          sx={{
-           
-            backgroundColor: 'white',
-            width: '30%',
-            height:'90%',
-            textAlign: 'right'
-            // marginRight:'30%'
-            
-          }}
-          marginLeft='30%'
-          label='amount'
-          InputLabelProps={{
-            sx: {
-              color: 'lightgrey'
-            }
-          }}
-        />
-      </div>
-      <Button variant='contained' sx={{
-                backgroundColor: 'grey',
-                border: '1px solid black',
-                width:'10%',
-                color: 'black',
-                marginLeft: 'auto'
-              }} style={{ marginLeft: 'auto' }}>
-               <Link to={'/d'} 
-                  style={{textDecoration:"none",color:'white'}}> 
-                  ADD
-                  </Link> 
-            </Button>
-    </div>
-  )
+        <Box sx={{ mt: 3 }}>
+          <Grid container spacing={3} alignItems="center">
+            <Grid item xs={12} sm={6}>
+              <Typography variant="h5" sx={{ color: 'black', fontWeight: 'bold', fontFamily: 'Times New Roman' }}>
+                MY INCOME
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                label="Amount"
+                value={income}
+                onChange={(e) => setIncome(e.target.value)}
+                sx={{ backgroundColor: 'white' }}
+                InputLabelProps={{ sx: { color: 'lightgrey' } }}
+              />
+            </Grid>
+          </Grid>
+        </Box>
+        <Box sx={{ mt: 3 }}>
+          <Typography variant="h5" sx={{ color: 'black', fontWeight: 'bold', textAlign: 'center', fontFamily: 'Times New Roman', mb: 2 }}>
+            Recent Transactions
+          </Typography>
+          <Grid container spacing={3}>
+            {data.map(item => (
+              <Grid item xs={12} key={item._id}>
+                <Card sx={{ backgroundColor: 'white', borderRadius: 1, boxShadow: 3 }}>
+                  <CardContent>
+                    <Typography variant="h6" sx={{ fontWeight: 'bold' }}>ID: {item.id}</Typography>
+                    <Typography variant="body1">Title: {item.title}</Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+        <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
+          <Button
+            variant="contained"
+            sx={{
+              backgroundColor: 'grey',
+              color: 'white'
+            }}
+          >
+            <Link to={'/dashboard/add'} style={{ textDecoration: "none", color: 'white' }}>
+              ADD
+            </Link>
+          </Button>
+        </Box>
+      </Paper>
+    </Container>
+  );
 }
 
-export default Dashboard
+export default Dashboard;

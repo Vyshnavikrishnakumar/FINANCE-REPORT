@@ -1,51 +1,150 @@
-import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material'
+import { AppBar, Box, Button, Toolbar } from '@mui/material'
 import React from 'react'
 import { Link } from 'react-router-dom'
 import Logo from '../assets/Logo.png'
+import { useLocation, useNavigate } from 'react-router-dom';
+import Cookies from 'universal-cookie';
+import Cookies2 from 'js-cookie';
 
 const Navbar = () => {
-    
-  return (
-    <div>
-        
-      <Box>
-        <AppBar sx={{ backgroundColor: 'lightgrey' }}>
-          <Toolbar>
-            <Typography variant='h4'></Typography>
-            <img src={Logo} alt="Logo" style={{ height:60,width:350, marginLeft: 10 }} />
-            <Button variant='contained' sx={{
-                backgroundColor: 'grey',
-                border: '1px solid black',
-                width:'10%',
-                color: 'black',
-                marginLeft: 'auto'
-              }} style={{ marginLeft: 'auto' }}>
-               <Link to={'/'} 
-                  style={{textDecoration:"none",color:'white'}}> 
-                  LOGIN
-                  </Link> 
-            </Button>&nbsp;&nbsp;&nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+	const location = useLocation().pathname;
+	const navigate = useNavigate();
+	const cookies = new Cookies();
 
-            <Button variant='contained'
-            sx={{
-                backgroundColor: 'grey',
-                border: '1px solid black',
-                color: 'black',
-                width:'10%'
-                
-              }}><Link to={'/a'} 
-              style={{textDecoration:"none",color:'white'}}> 
-              SIGNUP
-              </Link> 
-             
-            </Button>
-          </Toolbar>
-        </AppBar>
-      </Box>
-      <br />
-    </div>
-  )
+	function checkLogin() {
+		if (Cookies2.get("session") !== "") {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	function DashboardButton() {
+		function Code() {
+			return (
+				<Button variant='contained'
+					sx={{
+						backgroundColor: 'grey',
+						border: '1px solid black',
+						width:'10%',
+						color: 'black',
+						marginRight: '10px'
+					}}>
+					<Link to={'/dashboard'} style={{textDecoration:"none",color:'white'}}> 
+						Dashboard
+					</Link>
+				</Button>
+				
+			)
+		}
+		
+		if (location === "/" && checkLogin()) {
+			return Code();
+		}
+	}
+
+	function LoginButton() {
+		function Code() {
+			return (
+				<Button variant='contained'
+					sx={{
+						backgroundColor: 'grey',
+						border: '1px solid black',
+						width:'10%',
+						color: 'black',
+						marginRight: '10px'
+					}}>
+					<Link to={'/'} style={{textDecoration:"none",color:'white'}}> 
+						Login
+					</Link>
+				</Button>
+				
+			)
+		}
+		
+		if (location === "/signup") {
+			return Code();
+		}
+		else if (location === "/admin") {
+			return Code();
+		}
+	}
+	
+	function SignUpButton() {
+		function Code() {
+			return (
+				<Button variant='contained'
+					sx={{
+						backgroundColor: 'grey',
+						border: '1px solid black',
+						color: 'black',
+						width:'10%',
+						marginRight: '10px'
+					}}>
+					<Link to={'/signup'} style={{textDecoration:"none",color:'white'}}> 
+						Sign Up
+					</Link>
+				</Button>
+			)
+		}
+		
+		if (location === "/") {
+			return Code();
+		}
+		else if (location === "/admin") {
+			return Code();
+		}
+	}
+	
+	function LogoutButton() {
+		function Code() {
+			return (
+				<Button variant='contained'
+					sx={{
+						backgroundColor: 'grey',
+						border: '1px solid black',
+						color: 'white',
+						width:'10%',
+						marginRight: '10px',
+						textDecoration: 'none'
+					}} onClick={logOut}>
+					Log Out
+				</Button>
+			)
+		}
+		
+		if (location === "/dashboard") {
+			return Code();
+		}
+		else if (location === "/admin/dashboard") {
+			return Code();
+		}
+	}
+
+	const logOut = ()=>{
+		cookies.set('session', '', { path: '/', secure: true, sameSite: true });
+		navigate("/");
+		window.location.reload();
+	};
+	return (
+		<div>
+			<Box>
+			<AppBar sx={{ backgroundColor: 'lightgrey' }}>
+				<Toolbar>
+				<img src={Logo} alt="Logo" style={{ height:60,width:120, marginLeft: 10, marginRight: 'auto'}} />			
+				
+				<DashboardButton/>
+				<LoginButton/>
+				<SignUpButton/>
+				<LogoutButton />
+				
+				</Toolbar>
+			</AppBar>
+			</Box>
+			<br /><br /><br /><br />
+		</div>
+	)
 }
 
 export default Navbar

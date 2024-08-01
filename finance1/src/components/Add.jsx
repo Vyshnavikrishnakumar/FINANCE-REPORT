@@ -1,102 +1,77 @@
-import { Button, TextField, Typography } from '@mui/material'
-import React from 'react'
-import { Link } from 'react-router-dom'
+// src/components/Add.jsx
+import React, { useContext } from 'react';
+import { TextField, Typography, Button, Box, Container, Grid, Paper } from '@mui/material';
+import { Link } from 'react-router-dom';
+import IncomeContext from './IncomeContext';  // Ensure the import matches the default export
 
 const Add = () => {
+  const { income, setIncome } = useContext(IncomeContext);
+
   return (
-    <div>
-        <br />
-      <Typography variant='h3'style={{  color: 'black', textAlign: 'center',fontSize:'170%',fontWeight:'bold',fontStyle: 'italic' }}>
-      
-INCOME  &nbsp; &   &nbsp; EXPENSE  &nbsp; LOGGING  &nbsp;FORM</Typography>
-      <br /><br /><br />
-
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography variant='h3' style={{ padding: '0% 0%', color: 'black', fontSize: '250%', fontWeight: 'bold', textAlign: 'left',fontFamily:'times roman' }}>
-          MY  &nbsp;  INCOME
+    <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
+      <Paper elevation={3} sx={{ p: 3 }}>
+        <Typography variant="h3" sx={{ color: 'black', textAlign: 'center', fontSize: '170%', fontWeight: 'bold', fontStyle: 'italic' }}>
+          INCOME & EXPENSE LOGGING FORM
         </Typography>
-        <TextField
-          variant='outlined'
-          sx={{
-           
-            backgroundColor: 'white',
-            width: '30%',
-            height:'90%',
-            textAlign: 'right'
-            // marginRight:'30%'
-            
-          }}
-          marginLeft='30%'
-          label='INCOME AMOUNT'
-          InputLabelProps={{
-            sx: {
-              color: 'lightgrey'
-            }
-          }}
-        />
-      </div>
-      <TextField variant='outlined' sx={{
-          backgroundColor: 'white',
-          borderRadius: 1,
-          width: '40%',
-          marginTop: 2
-        }} label='AMOUNT'  InputLabelProps={{
-            sx: {
-              color: 'lightgrey'
-            }
-          }}></TextField>
-          <br /><br /><br />
-      <TextField variant='outlined' sx={{
-          backgroundColor: 'white',
-          borderRadius: 1,
-          width: '40%',
-          marginTop: 2
-        }} label='CATEGORY'  InputLabelProps={{
-            sx: {
-              color: 'lightgrey'
-            }
-          }}></TextField>
-      <br /><br /><br />
-      <TextField variant='outlined'sx={{
-          backgroundColor: 'white',
-          borderRadius: '10%',
-          width: '40%',
-          marginTop: 2
-        }} label='DATE'  InputLabelProps={{
-            sx: {
-              color: 'lightgrey'
-            }
-          }}></TextField>
-            <br /><br /><br />
-            <TextField variant='outlined'sx={{
-          backgroundColor: 'white',
-          borderRadius: '10%',
-          width: '40%',
-          marginTop: 2
-        }} label='DESCRIPTION'  InputLabelProps={{
-            sx: {
-              color: 'lightgrey'
-            }
-          }}></TextField>
-      
-     
-<br /><br /><br /><br />
-
-
-      <Button variant='contained' sx={{
-                backgroundColor: 'grey',
-                border: '1px solid black',
-                width:'10%',
-                color: 'black',
-                marginLeft: 'auto'
-              }} style={{ marginLeft: 'auto' }}>
-               <Link to={'/c'} 
-                  style={{textDecoration:"none",color:'white'}}> 
+        <Box component="form" sx={{ mt: 3 }}>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <Typography variant="h5" sx={{ color: 'black', fontWeight: 'bold', textAlign: 'left', fontFamily: 'Times New Roman' }}>
+                MY INCOME
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                label="INCOME AMOUNT"
+                value={income}
+                onChange={(e) => setIncome(e.target.value)}
+                InputLabelProps={{ sx: { color: 'lightgrey' } }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                label="CATEGORY"
+                InputLabelProps={{ sx: { color: 'lightgrey' } }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                label="DATE"
+                InputLabelProps={{ sx: { color: 'lightgrey' } }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                label="DESCRIPTION"
+                InputLabelProps={{ sx: { color: 'lightgrey' } }}
+              />
+            </Grid>
+            <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <Button
+                variant="contained"
+                sx={{
+                  backgroundColor: 'grey',
+                  color: 'white'
+                }}
+              >
+                <Link to={'/dashboard'} style={{ textDecoration: "none", color: 'white' }}>
                   ADD
-                  </Link> 
-            </Button>
-    </div>
-  )
+                </Link>
+              </Button>
+            </Grid>
+          </Grid>
+        </Box>
+      </Paper>
+    </Container>
+  );
 }
 
-export default Add
+export default Add;
