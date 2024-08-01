@@ -1,13 +1,22 @@
-import { Button, TextField, Typography } from '@mui/material'
+import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import Cookies from 'universal-cookie'
 import Logo from '../assets/Logo.png'
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 const Admin = () => {
 	const navigate = useNavigate();
 	const cookies = new Cookies();
+
+	const [showPassword, setShowPassword] = React.useState(false);
+	const handleClickShowPassword = () => setShowPassword((show) => !show);
+	const handleMouseDownPassword = (event) => {
+		event.preventDefault();
+	};
+
 	const [inputs, setInputs] = useState({
 		username: "",
 		password: ""
@@ -69,26 +78,36 @@ const Admin = () => {
 		/>
 		<br /><br /><br />
 
-		<TextField 
-			variant='outlined'
-			type='password'
-			name='password'
-			value={inputs.password}
+		<FormControl sx={{ m: 1, width: '40%' }} variant="outlined">
+			<InputLabel sx={{color:'lightgrey'}}>Password</InputLabel>
+			<OutlinedInput
+			type={showPassword ? 'text' : 'password'}
+			endAdornment={
+				<InputAdornment position="end">
+				<IconButton
+					aria-label="toggle password visibility"
+					onClick={handleClickShowPassword}
+					onMouseDown={handleMouseDownPassword}
+					edge="end"
+				>
+					{showPassword ? <VisibilityOff /> : <Visibility />}
+				</IconButton>
+				</InputAdornment>
+			}
+			label="Password"
+			required
 			onChange={inputHandler}
 			onKeyDown={defaultKey}
+			name='password'
 			sx={{
-			backgroundColor: 'white',
-			borderRadius: '10%',
-			width: '40%',
-			marginTop: 2
-			}}
-			label='Password'
-			InputLabelProps={{
-			sx: {
-				color: 'lightgrey'
-			}
-			}}
-		/>
+				backgroundColor: 'white'}}
+				InputLabelProps={{
+					sx: {
+						color: 'lightgrey'
+					}
+				}}
+			/>
+        </FormControl>
 		<br /><br /><br />
 
 		<Button 
