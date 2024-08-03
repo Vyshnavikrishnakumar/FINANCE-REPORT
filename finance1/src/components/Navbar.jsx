@@ -4,21 +4,11 @@ import { Link } from 'react-router-dom'
 import Logo from '../assets/Logo.png'
 import { useLocation, useNavigate } from 'react-router-dom';
 import Cookies from 'universal-cookie';
-import Cookies2 from 'js-cookie';
 
 const Navbar = () => {
 	const location = useLocation().pathname;
 	const navigate = useNavigate();
 	const cookies = new Cookies();
-
-	function checkLogin() {
-		if (Cookies2.get("session") !== "") {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
 
 	function LoginButton() {
 		function Code() {

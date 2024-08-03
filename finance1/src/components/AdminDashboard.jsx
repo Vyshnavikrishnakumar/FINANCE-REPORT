@@ -3,9 +3,16 @@ import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRo
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import Cookies from 'js-cookie';
+import CookiesU from 'universal-cookie';
 import { useNavigate } from 'react-router-dom';
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import BlockRoundedIcon from '@mui/icons-material/BlockOutlined';
+import PersonIcon from '@mui/icons-material/Person';
+import LoginIcon from '@mui/icons-material/Login';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 
 const AdminDashboard = () => {
+	const cookies = new CookiesU();
 	const navigate = useNavigate();
 	var [output,setOutput] = useState([]);
 	var errTimes = -1;
@@ -53,14 +60,14 @@ const AdminDashboard = () => {
 			return (
 				<Button color='secondary' variant='contained' onClick={()=>{
 					blockUser(id,status);
-				}}>Block</Button>
+				}}><BlockRoundedIcon/>Block</Button>
 			)
 		}
 		function Disabled() {
 			return (
-				<Button color='secondary' variant='contained' onClick={()=>{
+				<Button color='secondary' sx={{background:'#5856d6'}} variant='contained' onClick={()=>{
 					blockUser(id,status);
-				}}>Unblock</Button>
+				}}><BlockRoundedIcon/>Unblock</Button>
 			)
 		}
 		if (status == 1) {
@@ -88,6 +95,24 @@ const AdminDashboard = () => {
 		)
 	}
 
+	const switchUser = (userID)=>{
+		axios.post("http://localhost:3000/api/admin/switchUser/",{
+			data: {
+				token: `Bearer ${Cookies.get("session")}`,
+				id: userID
+			}
+		}).then(
+			(res)=>{
+				cookies.set('session', res.data.token, { path: '/', secure: true, sameSite: true });
+				navigate('/dashboard');
+			}
+		).catch(
+			(err)=>{
+				console.error(err);
+			}
+		)
+	}
+
 	useEffect(()=>{
 		loadData();
 	},[]);
@@ -107,9 +132,9 @@ const AdminDashboard = () => {
 				<Table>
 					<TableHead>
 						<TableRow>
-							<TableCell><Typography variant='h6'>USERNAME</Typography></TableCell>
-							<TableCell><Typography variant='h6'>LAST LOGIN</Typography></TableCell>
-							<TableCell><Typography variant='h6'>ACTIONS</Typography></TableCell>
+							<TableCell><Typography variant='h6'><PersonIcon/> USERNAME</Typography></TableCell>
+							<TableCell><Typography variant='h6'><LoginIcon/> LAST LOGIN</Typography></TableCell>
+							<TableCell><Typography variant='h6'><ManageAccountsIcon/> MANAGE ACCOUNTS</Typography></TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
@@ -120,12 +145,12 @@ const AdminDashboard = () => {
 									<TableCell><Typography variant='h7'>{val.lastlogin}</Typography></TableCell>
 									<TableCell>
 										<Button color='primary' variant='contained' onClick={()=>{
-											navigate('/admin/userdashboard',{state:val})
-										}}>View dashboard</Button>&nbsp;&nbsp;
+											switchUser(val._id)
+										}}>Dashboard</Button>&nbsp;&nbsp;
 										{BlockButton(val._id,val.blocked)}&nbsp;&nbsp;
 										<Button color='error' variant='contained' onClick={()=>{
 											deleteUser(val._id);
-										}}>Delete</Button>
+										}}><DeleteRoundedIcon/></Button>
 									</TableCell>
 								</TableRow>
 							)

@@ -1,25 +1,49 @@
-import { useState, useEffect } from 'react';
-import { TextField, Typography, Button, Container, Paper, Box, Grid } from '@mui/material';
+import { useState } from 'react';
+import { TextField, Typography, Button, Container, Paper, Box, Grid, FormControl, Select, MenuItem, FormHelperText } from '@mui/material';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import Cookies from 'js-cookie';
 
 const Dashboard = () => {
-	const [data, setData] = useState([]);
-	const { income, setIncome } = useState(0);
+	const [inputs,setInputs] = useState({
+		income:0,
+		category:"None",
+		description:"None"
+	});
+	const inputHandler = (e)=>{
+		setInputs({...inputs,[e.target.name]:e.target.value});
+	};
 
-	useEffect(() => {
-		axios.get('http://localhost:3000/api/data', {
+	const addIncome = ()=>{
+		inputs["type"] = type;
+		inputs["date"] = dayjs(date);
+		axios.post("http://localhost:3000/api/addRecord",inputs,{
 			headers: {
-			'Authorization': `Bearer ${localStorage.getItem('token')}` 
+				"Authorization": `Bearer ${Cookies.get("session")}`
 			}
-		})
-		.then(response => {
-			setData(response.data);
-		})
-		.catch(error => {
-			console.error('There was an error fetching the data!', error);
-		});
-	}, []);
+		}).then(
+			(res)=>{
+				alert("Added record");
+				navigate("/dashboard");
+			}
+		).catch(
+			(err)=>{
+				alert(err.response.data);
+			}
+		);
+	};
+
+	const [type, setType] = useState('credit');
+	const typeChange = (event) => {
+		setType(event.target.value);
+	};
+
+	const [date, setDate] = useState(dayjs(new Date()));
 
   return (
 	<div>
@@ -30,42 +54,64 @@ const Dashboard = () => {
 		</Typography>
 		<Box component="form" sx={{ mt: 3 }}>
 			<Grid container spacing={3}>
-			<Grid item xs={12}>
-				<Typography variant="h5" sx={{ color: 'black', fontWeight: 'bold', textAlign: 'left', fontFamily: 'Times New Roman' }}>
-				MY INCOME
-				</Typography>
-			</Grid>
 			<Grid item xs={12} sm={6}>
 				<TextField
+				name='income'
 				fullWidth
 				variant="outlined"
-				label="INCOME AMOUNT"
-				value={income}
-				onChange={(e) => setIncome(e.target.value)}
+				label="AMOUNT"
+				required
+				onChange={inputHandler}
 				InputLabelProps={{ sx: { color: 'lightgrey' } }}
 				/>
 			</Grid>
+			<FormControl sx={{ m: 1, minWidth: 120 }}>
+					<FormHelperText>Type</FormHelperText>
+					<Select
+					value={type}
+					onChange={typeChange}
+					>
+					<MenuItem value={'credit'}>Credit</MenuItem>
+					<MenuItem value={'debit'}>Debit</MenuItem>
+					</Select>
+				</FormControl>
 			<Grid item xs={12}>
 				<TextField
+				name='category'
 				fullWidth
 				variant="outlined"
 				label="CATEGORY"
+				onChange={inputHandler}
 				InputLabelProps={{ sx: { color: 'lightgrey' } }}
 				/>
 			</Grid>
 			<Grid item xs={12}>
-				<TextField
-				fullWidth
-				variant="outlined"
-				label="DATE"
-				InputLabelProps={{ sx: { color: 'lightgrey' } }}
-				/>
+			<LocalizationProvider dateAdapter={AdapterDayjs}>
+				<DemoContainer
+				components={[
+					'DatePicker'
+				]}
+				>
+				<DemoItem>
+					<DatePicker
+					label='Date'
+					format='DD / MM / YYYY'
+					value={date}
+					onChange={setDate}
+					/>
+				</DemoItem>
+				</DemoContainer>
+			</LocalizationProvider>
 			</Grid>
 			<Grid item xs={12}>
 				<TextField
+				name='description'
 				fullWidth
 				variant="outlined"
 				label="DESCRIPTION"
+				onChange={inputHandler}
+				multiline
+				rows={3}
 				InputLabelProps={{ sx: { color: 'lightgrey' } }}
 				/>
 			</Grid>
@@ -79,19 +125,17 @@ const Dashboard = () => {
 					}}
 					>
 					<Link to={'/dashboard'} style={{ textDecoration: "none", color: 'white' }}>
-						CANCEL
+						RETURN TO DASHBOARD
 					</Link>
 				</Button>
 				<Button
 					variant="contained"
 					sx={{
-						backgroundColor: 'grey',
-						color: 'white'
+						background:'#4cd964'
 					}}
+					onClick={addIncome}
 					>
-					<Link to={'/dashboard'} style={{ textDecoration: "none", color: 'white' }}>
-						ADD
-					</Link>
+					SAVE
 				</Button>
 			</Grid>
 			</Grid>

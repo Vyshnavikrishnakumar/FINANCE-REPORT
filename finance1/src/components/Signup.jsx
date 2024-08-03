@@ -222,7 +222,7 @@ const Signup = () => {
 			</Button>
 			<br /><br />
 
-			{loginFlag ? <CircularProgress /> : null}
+			{loginFlag ? <LoadingCircle /> : null}
 		</Box>			
 	</div>
 	)
