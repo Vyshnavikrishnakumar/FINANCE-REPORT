@@ -4,45 +4,11 @@ import { Link } from 'react-router-dom'
 import Logo from '../assets/Logo.png'
 import { useLocation, useNavigate } from 'react-router-dom';
 import Cookies from 'universal-cookie';
-import Cookies2 from 'js-cookie';
 
 const Navbar = () => {
 	const location = useLocation().pathname;
 	const navigate = useNavigate();
 	const cookies = new Cookies();
-
-	function checkLogin() {
-		if (Cookies2.get("session") !== "") {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-	
-	function DashboardButton() {
-		function Code() {
-			return (
-				<Button variant='contained'
-					sx={{
-						backgroundColor: 'grey',
-						border: '1px solid black',
-						width:'10%',
-						color: 'black',
-						marginRight: '10px'
-					}}>
-					<Link to={'/dashboard'} style={{textDecoration:"none",color:'white'}}> 
-						Dashboard
-					</Link>
-				</Button>
-				
-			)
-		}
-		
-		if (location === "/" && checkLogin()) {
-			return Code();
-		}
-	}
 
 	function LoginButton() {
 		function Code() {
@@ -117,6 +83,9 @@ const Navbar = () => {
 		if (location === "/dashboard") {
 			return Code();
 		}
+		else if (location === "/dashboard/add") {
+			return Code();
+		}
 		else if (location === "/admin/dashboard") {
 			return Code();
 		}
@@ -134,7 +103,6 @@ const Navbar = () => {
 				<Toolbar>
 				<img src={Logo} alt="Logo" style={{ height:60,width:120, marginLeft: 10, marginRight: 'auto'}} />			
 				
-				<DashboardButton/>
 				<LoginButton/>
 				<SignUpButton/>
 				<LogoutButton />

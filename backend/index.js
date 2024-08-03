@@ -92,14 +92,96 @@ app.post("/api/signin", async (req, res) => {
 	}
 });
 
+app.post("/api/addRecord", async (req, res) => {
+	const userID = verifyToken(req.headers.authorization)["id"];
+	if (userID === "") {
+		res.status(401).send("Access Denied!");
+	}
+	else {
+		const amount = req.body.income;
+		const chk = Math.trunc(amount);
+		var body = req.body;
+		if (chk%1 === 0) {
+			if (chk === 0) {
+				res.status(401).send("Amount is zero!");
+			}
+			const _id = userID;
+			const userData = await UserModel.findOne({ _id });
+			var cache = await userData.data;
+			body.income = parseFloat(body.income);
+			cache.unshift(body);
+			for (i=0;i<cache.length;i++) {
+				cache[i].index = i;
+			}
+			await UserModel.findByIdAndUpdate(_id,{data:cache});
+			res.send("Record added");
+		}
+		else {
+			res.status(401).send("Please enter valid amount!")
+		}
+	}
+});
+
+app.delete("/api/deleteRecord/:index",async(req,res)=>{
+	const userID = verifyToken(req.headers.authorization)["id"];
+	if (userID === "") {
+		res.status(401).send("Access Denied!");
+	}
+	else {
+		const _id = userID;
+		var index = req.params.index;
+		const userData = await UserModel.findOne({ _id });
+		var cache = userData.data;
+		cache.splice(index,1);
+		for (i=0;i<cache.length;i++) {
+			cache[i].index = i;
+		}
+		await UserModel.findByIdAndUpdate(_id,{data:cache});
+		res.send("Record deleted");
+	}
+});
+
 app.get("/api/dashboard", async (req, res) => {
 	const userID = verifyToken(req.headers.authorization)["id"];
 	if (userID === "") {
 		res.status(401).send("Access Denied!")
 	}
 	else {
-		//goutham - Fetch data for user dashboard
-		const userData = await UserModel.findOne({ userID });
+		const _id = userID;
+		const userData = await UserModel.findOne({ _id });
+		const data = userData.data;
+		var response = {
+			balance:0,
+			spent:0,
+			credits:0,
+			debits:0
+		};
+		for (i=0;i<data.length;i++) {
+			item = data[i]
+			if (item.type === 'credit') {
+				response.credits++;
+				response.balance = response.balance + item.income;
+			}
+			else {
+				response.debits++;
+				response.balance = response.balance - item.income;
+				response.spent = response.spent + item.income;
+			}
+		}
+		res.send({records:userData.data, total:response});
+	}
+});
+
+app.get("/api/getName", async (req, res) => {
+	const userID = verifyToken(req.headers.authorization)["id"];
+	if (userID === "") {
+		res.status(401).send("Access Denied!")
+	}
+	else {
+		const _id = userID;
+		const userData = await UserModel.findOne({ _id });
+		const name = userData.name;
+		res.send({name});
 	}
 });
 
@@ -173,6 +255,18 @@ app.post("/api/admin/blockUser/:id",async(req,res)=>{
 		} catch (error) {
 			console.error(error);
 		}
+	}
+});
+
+app.post("/api/admin/switchUser", async (req, res) => {
+	userID = req.body.data.id;
+	isAdmin = verifyToken(req.body.data.token)["isAdmin"];
+	if (userID === "" || isAdmin === 0) {
+		res.status(401).send("Access Denied!")
+	}
+	else {
+		const token = jwt.sign({ id: userID, isAdmin: 1 }, tokenSecret);
+		res.send({ token });
 	}
 });
 

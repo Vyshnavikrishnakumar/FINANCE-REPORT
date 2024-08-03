@@ -14,7 +14,9 @@
     "@emotion/styled": "^11.12.0",
     "@mui/icons-material": "^5.16.6",
     "@mui/material": "^5.16.4",
+    "@mui/x-date-pickers": "^7.12.0",
     "axios": "^1.7.2",
+    "dayjs": "^1.11.12",
     "js-cookie": "^3.0.5",
     "react": "^18.3.1",
     "react-cookie": "^7.1.4",
@@ -29,6 +31,6 @@
     "eslint-plugin-react": "^7.34.3",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
-    "vite": "^5.3.4"
+    "vite": "^5.3.5"
   }
 }

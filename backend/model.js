@@ -5,16 +5,20 @@ var mongoose = require("mongoose");
 
 // schema creation
 var userSchema = mongoose.Schema({
-  username: String,
-  password: String,
-  blocked: Number,
-  lastlogin: {type:String, default:"Not logged in"}
+	name: String,
+	phoneNumber: String,
+	email: String,
+	username: String,
+	password: String,
+	blocked: Number,
+	lastlogin: {type:String, default:"Not logged in"},
+	data: {type:Array, default:[],}
 });
 
 // admin schema creation
 var adminSchema = mongoose.Schema({
-  username: String,
-  password: String
+	username: String,
+	password: String
 });
 
 // model creation

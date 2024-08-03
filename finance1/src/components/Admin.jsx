@@ -1,55 +1,65 @@
-import { Button, CircularProgress, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Typography, Box } from '@mui/material';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import Cookies from 'universal-cookie';
-import Logo from '../assets/Logo.png';
+import { Box, Button, CircularProgress, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Typography } from '@mui/material'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import Cookies from 'universal-cookie'
+import Logo from '../assets/Logo.png'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 const Admin = () => {
-    const [loginFlag, setLoginFlag] = useState(false);
+	const [loginFlag, setloginFlag] = useState(false);
 
-    const navigate = useNavigate();
-    const cookies = new Cookies();
+	function LoadingCircle() {
+		function Code() {
+			return (
+				<CircularProgress />
+			)
+		}
+		return Code();
+	}
 
-    const [showPassword, setShowPassword] = useState(false);
-    const handleClickShowPassword = () => setShowPassword((show) => !show);
-    const handleMouseDownPassword = (event) => event.preventDefault();
+	const navigate = useNavigate();
+	const cookies = new Cookies();
 
-    const [inputs, setInputs] = useState({
-        username: "",
-        password: ""
-    });
+	const [showPassword, setShowPassword] = useState(false);
+	const handleClickShowPassword = () => setShowPassword((show) => !show);
+	const handleMouseDownPassword = (event) => {
+		event.preventDefault();
+	};
 
-    const inputHandler = (e) => {
-        setInputs({ ...inputs, [e.target.name]: e.target.value });
-    };
+	const [inputs, setInputs] = useState({
+		username: "",
+		password: ""
+	});
 
-    const defaultKey = (event) => {
+	const inputHandler = (e) => {
+		setInputs({ ...inputs, [e.target.name]: e.target.value });
+	};
+
+	const defaultKey=(event)=> {
         if (event.code === "Enter" || event.code === "NumpadEnter") {
             loginAdmin();
         }
     };
 
-    const loginAdmin = () => {
-        setLoginFlag(true);
-        axios.post("http://localhost:3000/api/admin/signin", inputs).then(
-            (res) => {
-                setLoginFlag(false);
-                cookies.set('session', res.data.token, { path: '/', secure: true, sameSite: true });
-                navigate("/admin/dashboard");
-            }
-        ).catch(
-            (err) => {
-                setLoginFlag(false);
-                alert(err.response.data);
-            }
-        );
-    };
-
-    return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: '#f4f4f9' }}>
+	const loginAdmin = () => {
+		setloginFlag(true);
+		axios.post("http://localhost:3000/api/admin/signin", inputs).then(
+			(res) => {
+			setloginFlag(false);
+			cookies.set('session', res.data.token, { path: '/', secure: true, sameSite: true });
+			navigate("/admin/dashboard");
+			}
+		).catch(
+			(err) => {
+			setloginFlag(false);
+			alert(err.response.data);
+			}
+		);
+	};
+	return (
+		<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: '#f4f4f9' }}>
             <Box sx={{
                 backgroundColor: 'white',
                 borderRadius: 2,
@@ -158,6 +168,8 @@ const Admin = () => {
                     sx={{
                         borderRadius: '20px',
                         width: '100%',
+						marginTop: '20px',
+						marginBottom: '10px',
                         backgroundColor: '#3498db',
                         color: 'white',
                         '&:hover': {
@@ -172,7 +184,7 @@ const Admin = () => {
                 {loginFlag ? <CircularProgress /> : null}
             </Box>
         </div>
-    );
-};
+	)
+}
 
 export default Admin;
