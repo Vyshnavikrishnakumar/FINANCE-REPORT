@@ -119,6 +119,7 @@ const AdminDashboard = () => {
 	
 	return (
 		<div>
+			<br /><br /><br /><br /><br /><br /><br />
 			<Typography variant='h3' style={{ color: 'black', textAlign: 'center', fontSize: '170%', fontWeight: 'bold', fontStyle: 'italic' }}>
 				ADMIN DASHBOARD
 			</Typography>

@@ -21,7 +21,7 @@ const Navbar = () => {
 						color: 'black',
 						marginRight: '10px'
 					}}>
-					<Link to={'/'} style={{textDecoration:"none",color:'white'}}> 
+					<Link to={'/login'} style={{textDecoration:"none",color:'white'}}> 
 						Login
 					</Link>
 				</Button>
@@ -110,7 +110,7 @@ const Navbar = () => {
 				</Toolbar>
 			</AppBar>
 			</Box>
-			<br /><br /><br /><br />
+			<br />
 		</div>
 	)
 }
