@@ -170,7 +170,7 @@ const HomeWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background: url('https://s5.ezgif.com/tmp/ezgif-5-d8c543ae71.gif') no-repeat center center;
+  background: url('https://s1.ezgif.com/tmp/ezgif-1-09cf1b5d84.gif') no-repeat center center;
   background-size: cover;
   background-color: #050509; /* Darker blueish-black background color */
   color: white;
