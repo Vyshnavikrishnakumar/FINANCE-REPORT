@@ -122,6 +122,41 @@ app.post("/api/addRecord", async (req, res) => {
 	}
 });
 
+app.post("/api/updateRecord", async (req, res) => {
+	const userID = verifyToken(req.headers.authorization)["id"];
+	if (userID === "") {
+		res.status(401).send("Access Denied!");
+	}
+	else {
+		const amount = req.body.income;
+		const chk = Math.trunc(amount);
+		var body = req.body;
+		if (chk%1 === 0) {
+			if (chk === 0) {
+				res.status(401).send("Amount is zero!");
+			}
+			const _id = userID;
+			const userData = await UserModel.findOne({ _id });
+			var cache = await userData.data;
+			body.income = parseFloat(body.income);
+			var update = {
+				income:body.income,
+				category:body.category,
+				description:body.description,
+				type:body.type,
+				date:body.date,
+				index:body.index
+			}
+			cache[body.index] = update;
+			await UserModel.findByIdAndUpdate(_id,{data:cache});
+			res.send("Record updated");
+		}
+		else {
+			res.status(401).send("Please enter valid amount!")
+		}
+	}
+});
+
 app.delete("/api/deleteRecord/:index",async(req,res)=>{
 	const userID = verifyToken(req.headers.authorization)["id"];
 	if (userID === "") {
@@ -152,6 +187,7 @@ app.get("/api/dashboard", async (req, res) => {
 		const data = userData.data;
 		var response = {
 			balance:0,
+			income:0,
 			spent:0,
 			credits:0,
 			debits:0
@@ -160,14 +196,14 @@ app.get("/api/dashboard", async (req, res) => {
 			item = data[i]
 			if (item.type === 'credit') {
 				response.credits++;
-				response.balance = response.balance + item.income;
+				response.income = response.income + item.income;
 			}
 			else {
 				response.debits++;
-				response.balance = response.balance - item.income;
 				response.spent = response.spent + item.income;
 			}
 		}
+		response.balance = response.income - response.spent;
 		res.send({records:userData.data, total:response});
 	}
 });

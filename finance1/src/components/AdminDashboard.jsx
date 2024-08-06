@@ -39,20 +39,22 @@ const AdminDashboard = () => {
 		)
 	};
 	
-	const deleteUser = (id)=>{
-		axios.delete("http://localhost:3000/api/admin/deleteUser/" + id,{
-			headers: {
-				"Authorization": `Bearer ${Cookies.get("session")}`
-			}
-		}).then(
-			(res)=>{
-				loadData();
-			}
-		).catch(
-			(err)=>{
-				console.error(err);
-			}
-		)
+	const deleteUser = (id, username)=>{
+		if (confirm("Do you want to delete user " + username + "?")) {
+			axios.delete("http://localhost:3000/api/admin/deleteUser/" + id,{
+				headers: {
+					"Authorization": `Bearer ${Cookies.get("session")}`
+				}
+			}).then(
+				(res)=>{
+					loadData();
+				}
+			).catch(
+				(err)=>{
+					console.error(err);
+				}
+			)
+		}
 	};
 
 	function BlockButton(id,status) {
@@ -149,7 +151,7 @@ const AdminDashboard = () => {
 										}}>Dashboard</Button>&nbsp;&nbsp;
 										{BlockButton(val._id,val.blocked)}&nbsp;&nbsp;
 										<Button color='error' variant='contained' onClick={()=>{
-											deleteUser(val._id);
+											deleteUser(val._id,val.username);
 										}}><DeleteRoundedIcon/></Button>
 									</TableCell>
 								</TableRow>

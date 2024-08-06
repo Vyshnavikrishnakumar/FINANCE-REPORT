@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import EditIcon from '@mui/icons-material/Edit';
 
 const Dashboard = () => {
 	const navigate = useNavigate();
@@ -54,17 +55,19 @@ const Dashboard = () => {
 	}
 
 	function deleteRecord(index) {
-		axios.delete('http://localhost:3000/api/deleteRecord/' + index, {
-			headers: {
-				"Authorization": `Bearer ${Cookies.get("session")}`
-			}
-		})
-		.then(response => {
-			refreshDashboard();
-		})
-		.catch(err => {
-			alert(err.response.data);
-		});
+		if (confirm("Do you want to delete record?")) {
+			axios.delete('http://localhost:3000/api/deleteRecord/' + index, {
+				headers: {
+					"Authorization": `Bearer ${Cookies.get("session")}`
+				}
+			})
+			.then(response => {
+				refreshDashboard();
+			})
+			.catch(err => {
+				alert(err.response.data);
+			});
+		}
 	}
 
 	function getName() {
@@ -94,7 +97,7 @@ const Dashboard = () => {
 		{name} - DASHBOARD
 		</Typography>
 		<Typography mt={3} variant="h5" sx={{ color: 'grey', fontWeight: 'bold', fontFamily: 'Times New Roman' }}>
-		Balance: ₹{total.balance} &nbsp;&nbsp;&nbsp; Spent: ₹{total.spent}
+		Income: ₹{total.income} &nbsp;&nbsp;&nbsp; Balance: ₹{total.balance} &nbsp;&nbsp;&nbsp; Spent: ₹{total.spent}
 		</Typography>
 		<Box sx={{ mt: 3 }}>
 			<Typography variant="h5" sx={{ color: 'black', fontWeight: 'bold', textAlign: 'center', fontFamily: 'Times New Roman', mb: 2 }}>
@@ -121,7 +124,7 @@ const Dashboard = () => {
 					{TransactionHeading(item.type, item.income, item.category)}
 					<Typography variant="body1">Description: {item.description}</Typography>
 					<Typography variant="body2">Date: {item.date}</Typography>
-					<Button sx={{color:'#ff3b30', marginTop:'10px'}} onClick={()=>{deleteRecord(item.index)}}><DeleteRoundedIcon />Delete</Button>
+					<Button sx={{color:'#007aff', marginTop:'10px'}} onClick={()=>{navigate("/dashboard/edit",{state:item})}}><EditIcon />Edit</Button> &nbsp;&nbsp; <Button sx={{color:'#ff3b30', marginTop:'10px'}} onClick={()=>{deleteRecord(item.index)}}><DeleteRoundedIcon />Delete</Button>
 					</CardContent>
 				</Card>
 				</Grid>

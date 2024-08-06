@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { TextField, Typography, Button, Container, Paper, Box, Grid, FormControl, Select, MenuItem, FormHelperText } from '@mui/material';
 import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
@@ -11,25 +11,28 @@ import Cookies from 'js-cookie';
 
 const Dashboard = () => {
 	const navigate = useNavigate();
+	const location = useLocation();
+	const state = location.state;
 	const [inputs,setInputs] = useState({
-		income:0,
-		category:"None",
-		description:"None"
+		income:state.income,
+		category:state.category,
+		description:state.description
 	});
 	const inputHandler = (e)=>{
 		setInputs({...inputs,[e.target.name]:e.target.value});
 	};
 
-	const addIncome = ()=>{
+	const updateIncome = ()=>{
 		inputs["type"] = type;
 		inputs["date"] = dayjs(date);
-		axios.post("http://localhost:3000/api/addRecord",inputs,{
+		inputs["index"] = state.index;
+		axios.post("http://localhost:3000/api/updateRecord",inputs,{
 			headers: {
 				"Authorization": `Bearer ${Cookies.get("session")}`
 			}
 		}).then(
 			(res)=>{
-				alert("Added record");
+				alert(res.data);
 				navigate("/dashboard");
 			}
 		).catch(
@@ -39,12 +42,12 @@ const Dashboard = () => {
 		);
 	};
 
-	const [type, setType] = useState('credit');
+	const [type, setType] = useState(state.type);
 	const typeChange = (event) => {
 		setType(event.target.value);
 	};
 
-	const [date, setDate] = useState(dayjs(new Date()));
+	const [date, setDate] = useState(dayjs(state.date));
 
   return (
 	<div>
@@ -58,6 +61,7 @@ const Dashboard = () => {
 			<Grid item xs={12} sm={6}>
 				<TextField
 				name='income'
+				defaultValue={inputs.income}
 				fullWidth
 				variant="outlined"
 				label="AMOUNT"
@@ -79,6 +83,7 @@ const Dashboard = () => {
 			<Grid item xs={12}>
 				<TextField
 				name='category'
+				defaultValue={inputs.category}
 				fullWidth
 				variant="outlined"
 				label="CATEGORY"
@@ -107,6 +112,7 @@ const Dashboard = () => {
 			<Grid item xs={12}>
 				<TextField
 				name='description'
+				defaultValue={inputs.description}
 				fullWidth
 				variant="outlined"
 				label="DESCRIPTION"
@@ -134,7 +140,7 @@ const Dashboard = () => {
 					sx={{
 						background:'#4cd964'
 					}}
-					onClick={addIncome}
+					onClick={updateIncome}
 					>
 					SAVE
 				</Button>

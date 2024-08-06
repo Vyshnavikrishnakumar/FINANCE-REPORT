@@ -8,6 +8,7 @@ import Admin from './components/Admin'
 import Dashboard from './components/Dashboard'
 import AdminDashboard from './components/AdminDashboard'
 import Add from './components/Add'
+import Edit from './components/Edit'
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/dashboard/add" element={<Add />} />
+        <Route path="/dashboard/edit" element={<Edit />} />
       </Routes>
     </>
   );
